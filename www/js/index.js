@@ -1,3 +1,5 @@
+
+
 const config = {
     type: Phaser.AUTO,
     width: 800,
@@ -22,6 +24,7 @@ var scoreText;
 
 //Se ejecutará antes de que el juego cargue. Es un buen lugar para importar aquellos archivos que usemos en éste.
 function preload () {
+    
     this.load.image('sky', 'assets/sky.png');
     // el suelo es una imagen de 400x32 px
     this.load.image('ground', 'assets/platform.png');
@@ -31,13 +34,12 @@ function preload () {
         'assets/dude.png',
         { frameWidth: 32, frameHeight: 48 }
     );
+    this.load.image('button', 'assets/btn-reiniciar.png');
 }
 
 //Se ejecutará al momento de que el juego inicie. Es un buen lugar para ingresar todos los objetos que se mostrarán en pantalla.
-function create () {
-    //this.add.image(400, 300, 'sky');        //Mostrando la imágen de fondo
-    //this.add.image(400, 300, 'star');
-
+function create () {   
+    
     this.add.image(400, 300, 'sky');
     platforms = this.physics.add.staticGroup();
     platforms.create(400, 568, 'ground').setScale(2).refreshBody(); // añadimos la plataforma de más abajo, duplicamos sus dimensiones y actualizamos. Después de redimensionar será una imagen de 800x64px
@@ -46,6 +48,7 @@ function create () {
     platforms.create(50, 250, 'ground');
     platforms.create(750, 220, 'ground');
 
+    /*
     // añadimos el sprite
     star = this.physics.add.sprite(400, 450, 'star');
     // fijamos un rebote y limitamos al mundo visible
@@ -54,8 +57,9 @@ function create () {
     // fijamos su gravedad
     star.body.setGravityY(300);
     // evitamos que traspase las plataformas
-    this.physics.add.collider(star, platforms);
-
+    //this.physics.add.collider(star, platforms);
+    */
+   
     player = this.physics.add.sprite(100, 450, 'dude');
 
     player.setBounce(0.2);
@@ -126,7 +130,6 @@ function create () {
             bomb.setBounce(1);
             bomb.setCollideWorldBounds(true);
             bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
-
         }
     }
 
@@ -147,8 +150,13 @@ function create () {
         player.setTint(0xff0000);
         player.anims.play('turn');
         gameOver = true;
+        
+        //Agregando el bbotón de reiniciar una vez el juego haya terminado
+        const button = this.add.sprite( 400, 300, 'button')
+        .setInteractive()
+        .on('pointerdown', () => window.location.reload());
+        //.on('pointerup', () => button.setScale( 1 ));
     }
-
 }
 
 //Se ejecutará periódicamente . Es un buen lugar para revisar eventos como la colisión entre objetos del juego.
@@ -177,3 +185,11 @@ function update () {
         player.setVelocityY(-480);  //Configurando la altura del salto
     }
 }
+
+/*
+function restart(){
+    if(window.confirm('¿Desea reiniciar el juego?')){
+        create.restart();
+    }
+}
+*/
